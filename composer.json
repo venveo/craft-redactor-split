@@ -1,0 +1,41 @@
+{
+    "name": "venveo/craft-redactor-split",
+    "description": "Split a matrix block",
+    "type": "craft-plugin",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "redactor split"
+    ],
+    "support": {
+        "docs": "https://github.com/venveo/craft-redactor-split/blob/master/README.md",
+        "issues": "https://github.com/venveo/craft-redactor-split/issues"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Venveo",
+            "homepage": "https://www.venveo.com"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.1.0",
+        "craftcms/redactor": "^2.3"
+    },
+    "autoload": {
+        "psr-4": {
+          "venveo\\redactorsplit\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Redactor Split",
+        "handle": "redactor-split",
+        "hasCpSettings": false,
+        "hasCpSection": false,
+        "changelogUrl": "https://raw.githubusercontent.com/venveo/craft-redactor-split/master/CHANGELOG.md",
+        "class": "venveo\\redactorsplit\\RedactorSplit"
+    }
+}
