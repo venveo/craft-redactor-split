@@ -1,8 +1,8 @@
 # Redactor Split plugin for Craft CMS 3.x
 
-Split a matrix block
+Split a matrix block into two blocks at your cursor.
 
-![Screenshot](resources/img/plugin-logo.png)
+**NOTE:** This plugin will cost $7 when released.
 
 ## Requirements
 
