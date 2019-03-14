@@ -1,3 +1,8 @@
-.venveo.icon.redactor-split {
-
+.venveo.icon.redactor-split::before {
+    display: block;
+    content: ' ';
+    background-image: url('./button-icon.svg');
+    background-size: 16px 16px;
+    height: 16px;
+    width: 16px;
 }

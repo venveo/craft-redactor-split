@@ -1,8 +1,12 @@
-# Redactor Split plugin for Craft CMS 3.x
+# Redactor Split plugin for Craft CMS 3
 
-Split a matrix block
+This plugin adds a button to redactor fields that are nested within matrix 
+blocks. When clicked, it spawns a new matrix block of the same type and moves 
+the current paragraph/tag on your cursor to the same field in the new block.
+ 
+Best paired with a [Matrix Content builder](https://nystudio107.com/blog/creating-a-content-builder-in-craft-cms)
 
-![Screenshot](resources/img/plugin-logo.png)
+![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)
 
 ## Requirements
 

@@ -37,6 +37,9 @@ class RedactorSplitAsset extends AssetBundle
         $this->js = [
             'redactor-split.js'
         ];
+        $this->css = [
+            'redactor-split.css'
+        ];
         parent::init();
     }
 

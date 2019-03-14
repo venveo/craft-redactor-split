@@ -27,9 +27,6 @@ use yii\base\Event;
  */
 class RedactorSplit extends Plugin
 {
-    // Static Properties
-    // =========================================================================
-
     /**
      * @var RedactorSplit
      */
@@ -47,18 +44,15 @@ class RedactorSplit extends Plugin
             Event::on(
                 RichText::class,
                 RichText::EVENT_REGISTER_PLUGIN_PATHS,
-                function (RegisterPluginPathsEvent $event) {
-                    $src            = Craft::getAlias('@venveo/redactorsplit')
-                        . DIRECTORY_SEPARATOR
-                        . 'resources';
+                function(RegisterPluginPathsEvent $event) {
+                    $src = Craft::getAlias('@venveo/redactorsplit')
+                        .DIRECTORY_SEPARATOR
+                        .'resources';
                     $event->paths[] = $src;
                     Craft::$app->getView()->registerAssetBundle(RedactorSplitAsset::class);
                 }
             );
         }
     }
-
-    // Protected Methods
-    // =========================================================================
 
 }

@@ -64,7 +64,7 @@
                 return;
             }
             var $button = this.toolbar.addButton('Matrix Split', { title: this.lang.get('split'), api: 'plugin.redactor-split.split' });
-            $button.setIcon('<i class="re-icon-alignment"></i>');
+            $button.setIcon('<i class="venveo icon redactor-split"></i>');
         },
         _splitMatrix: function() {
             if (!this.matrix.canAddMoreBlocks()) {
