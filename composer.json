@@ -2,7 +2,7 @@
     "name": "venveo/craft-redactor-split",
     "description": "Split a matrix block",
     "type": "craft-plugin",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "keywords": [
         "craft",
         "cms",
