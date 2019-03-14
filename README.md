@@ -6,7 +6,7 @@ the current paragraph/tag on your cursor to the same field in the new block.
  
 Best paired with a [Matrix Content builder](https://nystudio107.com/blog/creating-a-content-builder-in-craft-cms)
 
-![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)
+[Watch a Demo](https://venveo.d.pr/RtWDxb)
 
 ## Requirements
 
