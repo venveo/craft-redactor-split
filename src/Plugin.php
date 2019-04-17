@@ -12,25 +12,35 @@ namespace venveo\redactorsplit;
 
 
 use Craft;
-use craft\base\Plugin;
+use craft\base\Plugin as BasePlugin;
 use craft\redactor\events\RegisterPluginPathsEvent;
 use craft\redactor\Field as RichText;
+use craft\web\View;
+use venveo\redactorsplit\services\RedactorSplit;
 use yii\base\Event;
 
 /**
  * Class RedactorSplit
  *
+ * @property RedactorSplit service
  * @author    Venveo
  * @package   RedactorSplit
  * @since     1.0.0
  *
  */
-class RedactorSplit extends Plugin
+class Plugin extends BasePlugin
 {
     /**
-     * @var RedactorSplit
+     * @var Plugin
      */
     public static $plugin;
+
+    function __construct($id, $parent = null, array $config = [])
+    {
+        parent::__construct($id, $parent, $config);
+
+        $this->setComponents(['service' => RedactorSplit::class]);
+    }
 
     /**
      * @inheritdoc
@@ -50,6 +60,8 @@ class RedactorSplit extends Plugin
                         .'resources';
                     $event->paths[] = $src;
                     Craft::$app->getView()->registerAssetBundle(RedactorSplitAsset::class);
+                    Craft::$app->getView()->registerJs(sprintf('var redactorSplitMapping = %s;', \GuzzleHttp\json_encode($this->service->getMappings())), View::POS_HEAD);
+
                 }
             );
         }

@@ -7,6 +7,7 @@
         translations: {
             en: {
                 "split": "Split Matrix Block",
+                "auto-split": "Auto-split",
             }
         },
         init: function(app)
@@ -35,8 +36,8 @@
             this.$matrixblock = this.$root.closest('.matrixblock')
             this.matrixblock = this.$matrixblock.data('block');
             this.matrixblocktype = this.$matrixblock.data('type');
-            this.matrix = this.$root.closest('.matrix').data('matrix')
-            this.field = this.$root.closest('.field')
+            this.matrix = this.$root.closest('.matrix').data('matrix');
+            this.field = this.$root.closest('.field');
         },
         onstarted: function()
         {
@@ -63,8 +64,14 @@
             if (!this.shouldMount) {
                 return;
             }
-            var $button = this.toolbar.addButton('Matrix Split', { title: this.lang.get('split'), api: 'plugin.redactor-split.split' });
-            $button.setIcon('<i class="venveo icon redactor-split"></i>');
+            var $splitButton = this.toolbar.addButton('Matrix Split', { title: this.lang.get('split'), api: 'plugin.redactor-split.split' });
+            if (window.redactorSplitMapping) {
+                var $autoSplit = this.toolbar.addButton('Auto Split', {
+                    title: this.lang.get('auto-split'),
+                    api: 'plugin.redactor-split.autoSplit'
+                });
+            }
+            $splitButton.setIcon('<i class="venveo icon redactor-split"></i>');
         },
         _splitMatrix: function() {
             if (!this.matrix.canAddMoreBlocks()) {
@@ -89,7 +96,6 @@
             var cb = function(e) {
                 var $block = e.$block;
                 self.matrix.off('blockAdded', cb);
-                console.log(self.field)
                 var fieldId = self.field.attr('id');
                 var split = fieldId.split('-')
                 var fieldHandle = split[split.length - 2]; // Get the field handle
@@ -104,9 +110,71 @@
             this.matrix.on('blockAdded', cb)
             this.matrix.addBlock(this.matrixblocktype, this.$matrixblock)
         },
+
+        _autoSplitMatrix: function() {
+            if (!this.matrix.canAddMoreBlocks()) {
+                alert('Max blocks reached!');
+                return;
+            }
+
+            var fieldId = this.matrix.id;
+            var split = fieldId.split('-')
+            var fieldHandle = split[split.length - 1]; // Get the field handle
+
+            // Get all nodes (elements) through the one we have selected
+            var selectedElement = this.selection.getElement();
+
+            var tag = selectedElement.tagName.toLowerCase();
+            if (window.redactorSplitMapping && window.redactorSplitMapping.hasOwnProperty(fieldHandle) && window.redactorSplitMapping[fieldHandle].hasOwnProperty(tag)) {
+                var mapping = window.redactorSplitMapping[fieldHandle][tag];
+            }
+            if(!mapping) {
+                alert('No valid mapping for field');
+            }
+            var blockTypes = Object.keys(mapping);
+            if (!blockTypes) {
+                alert('No valid block type found for '+ tag);
+            }
+            var fieldMap = mapping[blockTypes[0]];
+            var self = this;
+            // var self = this;
+            var cb = function(e) {
+                var $block = e.$block;
+                self.matrix.off('blockAdded', cb);
+                // fields[contentBuilder][new2][fields][headingType]
+                var fieldNamePrefix = e.target.inputNamePrefix + '[' + $block[0].dataset.id + '][fields]';
+                for (var key in mapping[blockTypes[0]]) {
+                    // skip loop if the property is from prototype
+                    if (!mapping[blockTypes[0]].hasOwnProperty(key)) continue;
+                    var fieldHandle = key;
+                    var fieldValue = mapping[blockTypes[0]][key];
+                    var fieldName = fieldNamePrefix + '[' + fieldHandle + ']';
+                    var $field = document.querySelector("[name='"+fieldName+"']");
+                    var processFieldValue = self._processFieldValue(fieldValue, selectedElement);
+                    $($field).val(processFieldValue);
+                    selectedElement.remove();
+                }
+            }
+
+            this.matrix.on('blockAdded', cb)
+            this.matrix.addBlock(blockTypes[0], this.$matrixblock);
+
+        },
+
+        _processFieldValue: function(valueFromMap, $targetElement) {
+            if (valueFromMap === '%text%') {
+                return $targetElement.textContent;
+            }
+            return valueFromMap;
+        },
+
         split: function()
         {
             this._splitMatrix();
+        },
+        autoSplit: function()
+        {
+            this._autoSplitMatrix();
         },
     });
 })(Redactor);

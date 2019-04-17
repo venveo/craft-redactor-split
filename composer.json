@@ -33,9 +33,7 @@
     "extra": {
         "name": "Redactor Split",
         "handle": "redactor-split",
-        "hasCpSettings": false,
-        "hasCpSection": false,
         "changelogUrl": "https://raw.githubusercontent.com/venveo/craft-redactor-split/master/CHANGELOG.md",
-        "class": "venveo\\redactorsplit\\RedactorSplit"
+        "class": "venveo\\redactorsplit\\Plugin"
     }
 }

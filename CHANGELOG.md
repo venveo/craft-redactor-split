@@ -1,4 +1,7 @@
 # Redactor Split Changelog
+## Unreleased
+### Changed
+- Code refactoring
 
 ## 1.0.1 - 2019-03-14
 ### Changed
