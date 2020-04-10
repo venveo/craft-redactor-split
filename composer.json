@@ -1,8 +1,8 @@
 {
     "name": "venveo/craft-redactor-split",
-    "description": "Split a matrix block",
+    "description": "Split a redactor field within Matrix blocks into additional blocks",
     "type": "craft-plugin",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "keywords": [
         "craft",
         "cms",
@@ -22,7 +22,7 @@
         }
     ],
     "require": {
-        "craftcms/cms": "^3.1.0",
+        "craftcms/cms": "^3.4.0",
         "craftcms/redactor": "^2.3"
     },
     "autoload": {
