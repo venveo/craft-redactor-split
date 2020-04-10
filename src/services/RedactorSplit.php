@@ -12,8 +12,7 @@ class RedactorSplit extends Component {
             'contentBuilder' => [
                 'h2' => [
                     'heading' => [
-                        'heading' => '%text%',
-                        'headingType' => 'h2'
+                        'text' => '%text%'
                     ]
                 ],
                 'h3' => [
@@ -23,8 +22,8 @@ class RedactorSplit extends Component {
                     ]
                 ],
                 'p' => [
-                    'text' => [
-                        'text' => '%text%'
+                    'richText' => [
+                        'richText' => '%text%'
                     ]
                 ],
                 'pre' => [

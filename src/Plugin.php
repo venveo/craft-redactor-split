@@ -15,7 +15,7 @@ use Craft;
 use craft\base\Plugin as BasePlugin;
 use craft\redactor\events\RegisterPluginPathsEvent;
 use craft\redactor\Field as RichText;
-use craft\web\View;
+use craft\services\Plugins;
 use venveo\redactorsplit\services\RedactorSplit;
 use yii\base\Event;
 
@@ -50,20 +50,24 @@ class Plugin extends BasePlugin
         parent::init();
         self::$plugin = $this;
 
-        if (Craft::$app->getPlugins()->getPlugin('redactor')) {
-            Event::on(
-                RichText::class,
-                RichText::EVENT_REGISTER_PLUGIN_PATHS,
-                function(RegisterPluginPathsEvent $event) {
-                    $src = Craft::getAlias('@venveo/redactorsplit')
-                        .DIRECTORY_SEPARATOR
-                        .'resources';
-                    $event->paths[] = $src;
-                    Craft::$app->getView()->registerAssetBundle(RedactorSplitAsset::class);
-                    Craft::$app->getView()->registerJs(sprintf('var redactorSplitMapping = %s;', \GuzzleHttp\json_encode($this->service->getMappings())), View::POS_HEAD);
 
-                }
-            );
+        if (Craft::$app->request->isCpRequest) {
+            if (Craft::$app->getPlugins()->isPluginInstalled('redactor')) {
+                Event::on(Plugins::class, Plugins::EVENT_AFTER_LOAD_PLUGINS, function () {
+                    Event::on(
+                        RichText::class,
+                        RichText::EVENT_REGISTER_PLUGIN_PATHS,
+                        function (RegisterPluginPathsEvent $event) {
+                            $src = Craft::getAlias('@venveo/redactorsplit')
+                                . DIRECTORY_SEPARATOR
+                                . 'resources';
+                            $event->paths[] = $src;
+                            Craft::$app->getView()->registerAssetBundle(RedactorSplitAsset::class);
+                        }
+                    );
+                    Craft::$app->getView()->registerJsVar('redactorSplitMapping', $this->service->getMappings());
+                });
+            }
         }
     }
 

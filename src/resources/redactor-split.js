@@ -142,7 +142,7 @@
                 var $block = e.$block;
                 self.matrix.off('blockAdded', cb);
                 // fields[contentBuilder][new2][fields][headingType]
-                var fieldNamePrefix = e.target.inputNamePrefix + '[' + $block[0].dataset.id + '][fields]';
+                var fieldNamePrefix = e.target.inputNamePrefix + '[blocks][' + $block[0].dataset.id + '][fields]';
                 for (var key in mapping[blockTypes[0]]) {
                     // skip loop if the property is from prototype
                     if (!mapping[blockTypes[0]].hasOwnProperty(key)) continue;
