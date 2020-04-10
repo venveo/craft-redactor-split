@@ -94,7 +94,7 @@
                 var split = fieldId.split('-')
                 var fieldHandle = split[split.length - 2]; // Get the field handle
                 // We'll probably need to modify this to make things like Neo and supertable work.
-                var id = e.target.inputIdPrefix + '-' + $block[0].dataset.id + '-fields-' + fieldHandle;
+                var id = e.target.inputIdPrefix + '-blocks-' + $block[0].dataset.id + '-fields-' + fieldHandle;
 
                 // Tell the init method what field to target for setting the content
                 nextRedactorFieldId = id;
