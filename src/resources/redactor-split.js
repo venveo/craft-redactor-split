@@ -3,6 +3,37 @@
     var nextRedactorFieldId = null;
     var redactorElementNodesToMigrate = null;
 
+    /**
+     * When the split button is clicked, we'll look at the currently selected node and determine if it should be skipped
+     * in favor of the next sibling node.
+     * @param node
+     * @returns {boolean}
+     */
+    var shouldSkipNode = function(node) {
+        // Nothing to skip to
+        if (!node.nextElementSibling) {
+            return false
+        }
+
+        return node.nodeValue === '\n' ||
+            (node.tagName === 'P' && node.textContent === '')
+    }
+
+    /**
+     * When the split button is clicked, we need to find the upper-most node to avoid splitting within nested nodes,
+     * such as lists.
+     * @param editor
+     * @param node
+     * @returns {*}
+     */
+    var resolveSelectedNode = function(editor, node) {
+        var $editor = editor.$editor.nodes[0]
+        while(node.parentNode !== $editor) {
+            node = node.parentNode
+        }
+        return node
+    }
+
     $R.add('plugin', 'redactor-split', {
         translations: {
             en: {
@@ -40,9 +71,13 @@
         },
         onstarted: function()
         {
+            // Don't try to do anything if we're not in a matrix block for some reason.
             if (!this.shouldMount) {
                 return;
             }
+
+            // If this plugin was just initialized on a block that was just spawned from a split, we need to add those
+            // elements to this block
             var myId = this.$root.attr('id');
             if (myId == nextRedactorFieldId && redactorElementNodesToMigrate.length) {
                 var fragment = new DocumentFragment();
@@ -57,14 +92,13 @@
                 redactorElementNodesToMigrate = [];
             }
         },
-        // public
         start: function()
         {
             if (!this.shouldMount) {
                 return;
             }
-            var $button = this.toolbar.addButton('Matrix Split', { title: this.lang.get('split'), api: 'plugin.redactor-split.split' });
-            $button.setIcon('<i class="venveo icon redactor-split"></i>');
+            var button = this.toolbar.addButton('Matrix Split', { title: this.lang.get('split'), api: 'plugin.redactor-split.split' });
+            button.setIcon('<i class="venveo icon redactor-split"></i>');
         },
         _splitMatrix: function() {
             if (!this.matrix.canAddMoreBlocks()) {
@@ -75,7 +109,37 @@
             // Get all nodes (elements) through the one we have selected
             redactorElementNodesToMigrate = [];
             var firstNode = this.editor.getFirstNode();
-            var selectedNode = this.selection.getElement();
+            var lastNode = this.editor.getLastNode();
+            var selectedNode = this.selection.getBlock();
+
+            // Editor is completely empty
+            if (!firstNode) {
+                return;
+            }
+
+            // Can't split a single node
+            if (firstNode === lastNode) {
+                return;
+            }
+
+            // If there isn't a node selected, just use the first one
+            if (!selectedNode) {
+                selectedNode = firstNode
+            } else {
+                // If an explicit node is selected, we need to ensure its the parent most element so we don't try to split
+                // non-splittable nodes (e.g. <li></li>)
+                selectedNode = resolveSelectedNode(this.editor, selectedNode)
+            }
+
+            // Don't split at newline characters
+            while (shouldSkipNode(selectedNode)) {
+                selectedNode = selectedNode.nextElementSibling
+            }
+
+            // Pointless
+            if (selectedNode === lastNode) {
+                return;
+            }
 
             redactorElementNodesToMigrate.push(firstNode);
 
@@ -89,7 +153,6 @@
             var cb = function(e) {
                 var $block = e.$block;
                 self.matrix.off('blockAdded', cb);
-                console.log(self.field)
                 var fieldId = self.field.attr('id');
                 var split = fieldId.split('-')
                 var fieldHandle = split[split.length - 2]; // Get the field handle
@@ -99,7 +162,6 @@
                 // Tell the init method what field to target for setting the content
                 nextRedactorFieldId = id;
             }
-
 
             this.matrix.on('blockAdded', cb)
             this.matrix.addBlock(this.matrixblocktype, this.$matrixblock)
