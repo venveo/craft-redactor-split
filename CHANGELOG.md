@@ -1,5 +1,9 @@
 # Redactor Split Changelog
 
+## Unreleased
+### Fixed
+- Improved plugin loading behavior
+
 ## 1.1.0 - 2020-04-10
 ### Fixed
 - Plugin not working on Craft 3.4

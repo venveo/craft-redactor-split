@@ -15,6 +15,7 @@ use Craft;
 use craft\base\Plugin;
 use craft\redactor\events\RegisterPluginPathsEvent;
 use craft\redactor\Field as RichText;
+use craft\services\Plugins;
 use yii\base\Event;
 
 /**
@@ -28,30 +29,26 @@ use yii\base\Event;
 class RedactorSplit extends Plugin
 {
     /**
-     * @var RedactorSplit
-     */
-    public static $plugin;
-
-    /**
      * @inheritdoc
      */
     public function init()
     {
         parent::init();
-        self::$plugin = $this;
 
-        if (Craft::$app->getPlugins()->getPlugin('redactor')) {
-            Event::on(
-                RichText::class,
-                RichText::EVENT_REGISTER_PLUGIN_PATHS,
-                function(RegisterPluginPathsEvent $event) {
-                    $src = Craft::getAlias('@venveo/redactorsplit')
-                        .DIRECTORY_SEPARATOR
-                        .'resources';
-                    $event->paths[] = $src;
-                    Craft::$app->getView()->registerAssetBundle(RedactorSplitAsset::class);
-                }
-            );
+        if (Craft::$app->request->isCpRequest && Craft::$app->plugins->isPluginEnabled('redactor')) {
+            Event::on(Plugins::class, Plugins::EVENT_AFTER_LOAD_PLUGINS, function () {
+                Event::on(
+                    RichText::class,
+                    RichText::EVENT_REGISTER_PLUGIN_PATHS,
+                    function (RegisterPluginPathsEvent $event) {
+                        $src = Craft::getAlias('@venveo/redactorsplit')
+                            . DIRECTORY_SEPARATOR
+                            . 'resources';
+                        $event->paths[] = $src;
+                        Craft::$app->getView()->registerAssetBundle(RedactorSplitAsset::class);
+                    }
+                );
+            });
         }
     }
 
