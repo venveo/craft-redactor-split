@@ -10,7 +10,6 @@
 
 namespace venveo\redactorsplit;
 
-
 use craft\redactor\assets\redactor\RedactorAsset;
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
@@ -32,15 +31,14 @@ class RedactorSplitAsset extends AssetBundle
         $this->depends = [
             CpAsset::class,
             RedactorAsset::class,
-            MatrixAsset::class
+            MatrixAsset::class,
         ];
         $this->js = [
-            'redactor-split.js'
+            'redactor-split.js',
         ];
         $this->css = [
-            'redactor-split.css'
+            'redactor-split.css',
         ];
         parent::init();
     }
-
 }
