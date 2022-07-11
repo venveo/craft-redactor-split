@@ -1,5 +1,10 @@
 # Redactor Split Changelog
 
+## 4.0.0 - 2022-07-10
+
+### Changed
+- Redactor Split now requires Craft 4
+
 ## 1.1.1 - 2021-04-17
 
 ### Changed
