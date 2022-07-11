@@ -1,4 +1,4 @@
-# Redactor Split plugin for Craft CMS 3
+# Redactor Split plugin for Craft CMS 4
 
 This plugin adds a button to redactor fields that are nested within matrix 
 blocks that when clicked, spawns a new matrix block of the same type and moves 
@@ -10,7 +10,7 @@ Best paired with a [Matrix Content builder](https://nystudio107.com/blog/creatin
 
 ## Requirements
 
-- Craft CMS 3.1.x - 3.7.x
+- Craft CMS 4
 - Redactor for Craft CMS
 
 ## Installation
